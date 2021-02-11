@@ -2,7 +2,7 @@
   "profiles": {
     "3task": {
       "commandName": "Project",
-      "commandLineArgs": "a b c d e f g"
+      "commandLineArgs": "stone scissors paper lizzard Spok"
     }
   }
 }

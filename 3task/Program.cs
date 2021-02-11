@@ -33,17 +33,19 @@ namespace _3task
             return args[RandomNumberGenerator.GetInt32(args.Length - 1)];
         }
 
-        static void checkArguments(string[] args)
+        static bool checkArguments(string[] args)
         {
             if (args.Length < 3)
             {
                 Console.WriteLine("Not enough parametrs");
+                return false;
             }
             else 
             {
                 if (args.Length % 2 == 0)
                 {
                     Console.WriteLine("Number of parametrs can't be even");
+                    return false;
                 }
             }
             for (int i = 0; i < args.Length; i++)
@@ -52,11 +54,12 @@ namespace _3task
                 {
                     if (args[i] == args[j] && j != i)
                     {
-                        Console.WriteLine("Parametrs can't be equal");
-                        break;
+                        Console.WriteLine("Parametrs can't be equal.Please, be sure all the move strings are unique");
+                        return false;
                     }
                 }
             }
+            return true;
         }
         static void printMenu(string[] args)
         {
@@ -80,12 +83,11 @@ namespace _3task
             }
             else
             {
-                int i;
-                for (i = 0; i < index; i++)
+                for (int i = 0; i < index; i++)
                 {
                     losers.Add(args[i]);
                 }
-                for (int j = move - 1; j > index + (move/2) - 1; j--)
+                for (int j = move - 1; j > index + (move/2); j--)
                 {
                     losers.Add(args[j]);
                 }
@@ -97,7 +99,7 @@ namespace _3task
         {
             
             List<string> winners = new List<string>();
-            if (index + (move / 2) <= move)
+            if (index + (move / 2) <= move-1)
             {
                 for (int i = index + move/2; i > index; i--)
                 {
@@ -110,7 +112,7 @@ namespace _3task
                 {
                     winners.Add(args[i]);
                 }
-                for (int j = 0; j < index - (move / 2) + 1; j++)
+                for (int j = 0; j < index - (move / 2); j++)
                 {
                     winners.Add(args[j]);
                 }
@@ -119,7 +121,8 @@ namespace _3task
         }
         static void Main(string[] args)
         {
-            checkArguments(args);
+            if (!checkArguments(args))
+                return;
             byte[] key = getKey();
             computerMove = getComputerMove(args);
             byte[] hash = getHash(key, computerMove);
@@ -143,15 +146,15 @@ namespace _3task
             Console.WriteLine("Computer move:\r\n{0}", computerMove);
             var losers = getLosersList(userMoveNum, args.Length, args);
             var winners = getWinnersList(args , args.Length, userMoveNum);
-            if(losers.Exists(e=>e.Equals(computerMove)))
+            if (losers.Exists(e=>e.Equals(computerMove)))
             {
-                Console.WriteLine("You lose");
+                Console.WriteLine("Allright, okay, you WIN");
             }
             else
             {
                 if(winners.Exists(e => e.Equals(computerMove)))
                 {
-                    Console.WriteLine("Allright, okay, you WIN");
+                    Console.WriteLine("You lose");
                 }
                 else
                 {
